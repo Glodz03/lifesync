@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>LifeSync Stats</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #fff;
+  color: white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background: #4D4DA8;
+  height: 30px;
+  padding: 0 15px;
+}
+
+.header h1 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-weight: normal;
+}
+
+.container {
+  color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  padding: 20px;
+}
+
+.card {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: none;
+}
+
+.big {
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+</style>
+</head>
+
+<body>
+
+<div style="display:flex; align-items:center; background-color:#4D4DA8; width:1250px; height:45px; margin-left:15px;">
+
+  <div style="color:white; margin-left:10px; width:200px;">
+    <div style="font-size:14px;">Level <span id="level">1</span></div>
+    
+    <div style="background:#ccc; width:180px; height:8px; border-radius:5px;">
+      <div id="xpBar" style="background:#00ffcc; height:8px; width:0%; border-radius:5px;"></div>
+    </div>
+
+    <div style="font-size:10px;">
+      <span id="xp">0</span> / <span id="xpNeeded">100</span> XP
+    </div>
+  </div>
+
+ <a href="Life App Home Lavendar.html"  style="text-decoration:none;">
+  <h1 style="flex-grow:1; text-align:center; color:#fff; font-size:30px; margin:0;font-weight: normal; margin-left: 349px; margin-right: 353px">
+    LifeSync 
+  </h1>
+</a>
+  
+  <div style="display:flex; gap:20px; margin-right:48px;">
+    <a href="Life App Lavendar Account.html"><img src="Cole profile pic.jpg" style="width:38px; height:30px;"></a>
+    <a href="Life App Colour Pick.html"><img src="Colour.png" style="width:38px; height:30px;"></a>
+    <a href="Life App Lavendar Stats Dark.html"><img src="Moon.png" style="width:30px; height:30px; margin-top: 1px"></a>
+  </div>
+</div>
+
+<div style="background:#fff; height:30px;"></div>
+
+<div class="header">
+  <p style="font-size:20px; margin:auto;">
+    Daily Checklist Stats
+  </p>
+</div>
+
+<div style="
+  background:#4D4DA8;
+  min-height:700px;
+  padding-top:40px;
+">
+
+<div class="container">
+
+  <div class="card" style="color: #fff">
+    <h3>Completion Rate</h3>
+    <canvas id="completionChart" style="color: #fff"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Extra Progress</h3>
+    <canvas id="extraChart" style="color: #fff"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Total Progress</h3>
+    <canvas id="totalChart" style="color: #fff"></canvas>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-left: 230px">Overview</h3>
+    <div id="overview" style="margin-left: 230px; color: #fff"></div>
+  </div>
+
+</div>
+
+<script>
+const pageKey = 'lifesync-main';
+const PREFIX = 'checklist_' + pageKey;
+Chart.defaults.color = '#fff';
+
+function getAllRows() {
+  const keys = JSON.parse(localStorage.getItem(PREFIX + ':keys') || '[]');
+
+  return keys.map(k => {
+    try {
+      return JSON.parse(localStorage.getItem(PREFIX + ':row_' + k));
+    } catch {
+      return null;
+    }
+  }).filter(Boolean);
+}
+
+const rows = getAllRows();
+
+let completed = 0;
+let notCompleted = 0;
+
+let extras = [];
+let totals = [];
+let labels = [];
+
+rows.forEach((r, i) => {
+  if (r.done) completed++;
+  else notCompleted++;
+
+  extras.push(Number(r.extra || 0));
+  totals.push(Number(r.total || 0));
+  labels.push(r.displayName || "Task " + (i+1));
+});
+
+if (rows.length === 0) {
+  labels = ["No Data"];
+  extras = [0];
+  totals = [0];
+}
+
+new Chart(document.getElementById('completionChart'), {
+  type: 'pie',
+  data: {
+    labels: ['Completed', 'Not Completed'],
+    datasets: [{
+      data: [completed, notCompleted]
+    }]
+  }
+});
+
+new Chart(document.getElementById('extraChart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Extra',
+      data: extras
+    }]
+  }
+});
+
+new Chart(document.getElementById('totalChart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Total Progress',
+      data: totals,
+      fill: false
+    }]
+  }
+});
+
+const totalTasks = rows.length;
+const totalExtra = extras.reduce((a,b)=>a+b,0);
+const totalProgress = totals.reduce((a,b)=>a+b,0);
+
+const bestTaskIndex = extras.indexOf(Math.max(...extras));
+
+document.getElementById('overview').innerHTML = `
+  <div class="big">Tasks: ${totalTasks}</div>
+  <div>Completed: ${completed}</div>
+  <div>Not Completed: ${notCompleted}</div>
+  <div>Total Extra: ${totalExtra}</div>
+  <div>Total Progress: ${totalProgress}</div>
+  <div>Best Task: ${labels[bestTaskIndex] || 'N/A'}</div>
+`;
+
+</script>
+
+<script src="XP.js"></script>
+
+</body>
+</html>

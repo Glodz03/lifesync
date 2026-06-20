@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+font-family: Arial;
+}
+
+.row2 {
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: flex-start;
+gap: 30px;
+}
+
+.controls{
+text-align:center;
+margin-bottom:30px;
+margin-top: 5px;
+}
+
+.controls input{
+padding:8px;
+width:200px;
+}
+
+.controls select{
+padding:8px;
+}
+
+.controls button{
+padding:8px 12px;
+margin-left:5px;
+cursor:pointer;
+}
+
+.calendar-wrapper{
+position:relative;
+width:1050px;
+margin-left:57px;
+}
+
+.arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:35px;
+height:35px;
+border-radius:50%;
+border:none;
+background:#4D4DA8;
+color:#fff;
+cursor:pointer;
+font-size:18px;
+z-index:10;
+}
+
+.arrow.left{
+left:-45px;
+}
+
+.arrow.right{
+right:-155px;
+}
+
+.calendar{
+display:grid;
+grid-template-columns: repeat(7, 1fr);
+grid-template-rows: repeat(5, 1fr);
+margin-top: -430px;
+width:1150px;
+height:420px;
+background:#f8f8f8;
+border:2px solid #ccc;
+border-radius:12px;
+overflow:hidden;
+}
+
+.cell{
+border-right:1px solid #d0d0d0;
+border-bottom:1px solid #d0d0d0;
+padding:4px;
+position:relative;
+font-size:12px;
+}
+
+.cell:nth-child(7n){
+border-right:none;
+}
+
+.date{
+font-size:12px;
+font-weight:750;
+color:#4D4DA8;
+}
+
+.task{
+font-size:11px;
+margin-top:2px;
+display:flex;
+justify-content:space-between;
+}
+
+.task button{
+background:none;
+border:none;
+color:red;
+cursor:pointer;
+font-size:10px;
+}
+</style>
+
+</head>
+
+<body>
+<div style="display:flex; align-items:center; background-color:#4D4DA8; width:1250px; height:45px; margin-left:15px;">
+
+  <div style="color:white; margin-left:10px; width:200px;">
+    <div style="font-size:14px;">Level <span id="level">1</span></div>
+    
+    <div style="background:#ccc; width:180px; height:8px; border-radius:5px;">
+      <div id="xpBar" style="background:#00ffcc; height:8px; width:0%; border-radius:5px;"></div>
+    </div>
+
+    <div style="font-size:10px;">
+      <span id="xp">0</span> / <span id="xpNeeded">100</span> XP
+    </div>
+  </div>
+
+  <a href="Life App Home Lavendar.html" style="flex-grow:1; text-align:center; color:#fff; font-size:30px; margin:0; text-decoration:none;">
+    LifeSync
+  </a>
+
+  <div style="display:flex; gap:20px; margin-right:15px;">
+    <a href="Life App Lavendar Account.html"><img src="Cole profile pic.jpg" style="width:38px; height:30px; margin-top: 5px"></a>
+    <a href="Life App Colour Pick.html"><img src="Colour.png" style="width:38px; height:30px; margin-top: 5px"></a>
+    <a href="Life App Home Lavendar Dark.html"><img src="Moon.png" style="width:30px; height:30px; margin-top: 5px"></a>
+  </div>
+  </div>
+
+<div class="row2" style="margin-top:20px; width:1250px; height:500px; margin-left:12px; background-color:#4D4DA8;">
+
+<h2 id="monthTitle" style="color:#fff; margin-right:80px; margin-top:5px;font-weight: normal">February</h2>
+
+<div class="controls">
+<input id="taskInput" placeholder="Add task..." style="color:#4D4DA8">
+
+<select id="daySelect" style="color:#4D4DA8"></select>
+
+<button onclick="addTask()" style="color:#4D4DA8;font-weight:700;">Add</button>
+
+</div>
+
+</div>
+
+<div class="calendar-wrapper">
+
+<button class="arrow left" onclick="changeMonth(-1)">◀</button> <button class="arrow right" onclick="changeMonth(1)">▶</button>
+
+<div class="calendar" id="calendar"></div>
+
+</div>
+
+<script src="XP.js"></script>
+
+<script>
+
+let currentMonth = 1
+let currentYear = 2026
+
+let data = JSON.parse(localStorage.getItem("monthlyTasks")) || {}
+
+function getDaysInMonth(month, year){
+return new Date(year, month + 1, 0).getDate()
+}
+
+function render(){
+
+let calendar = document.getElementById("calendar")
+calendar.innerHTML=""
+
+let firstDay = new Date(currentYear, currentMonth, 1).getDay()
+let daysInMonth = getDaysInMonth(currentMonth, currentYear)
+
+firstDay = (firstDay === 0) ? 6 : firstDay - 1
+
+let monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+document.getElementById("monthTitle").innerText = monthNames[currentMonth]
+
+let select = document.getElementById("daySelect")
+select.innerHTML=""
+for(let i=1;i<=daysInMonth;i++){
+select.innerHTML += `<option value="${i}">${i}</option>`
+}
+
+for(let i=0;i<35;i++){
+
+let cell = document.createElement("div")
+cell.className="cell"
+
+let dayNum = i - firstDay + 1
+
+if(dayNum > 0 && dayNum <= daysInMonth){
+
+let key = `${currentYear}-${currentMonth}-${dayNum}`
+let tasks = data[key] || []
+
+let tasksHTML = tasks.map((t, index)=>`
+<div class="task">
+<span>${t}</span>
+<button onclick="removeTask('${key}', ${index})">x</button>
+</div>
+`).join("")
+
+cell.innerHTML = `
+<div class="date">${dayNum}</div>
+${tasksHTML}
+`
+
+}
+
+calendar.appendChild(cell)
+
+}
+
+}
+
+function addTask(){
+
+let task = document.getElementById("taskInput").value
+let day = document.getElementById("daySelect").value
+
+if(task === "") return
+
+let key = `${currentYear}-${currentMonth}-${day}`
+
+if(!data[key]) data[key] = []
+
+data[key].push(task)
+
+addXP(10, "Task Planned 📅")
+
+if(data[key].length === 1){
+  addXP(5, "Day Started ✅")
+}
+
+let today = new Date()
+if(currentYear >= today.getFullYear()){
+  if(currentMonth > today.getMonth() || day > today.getDate()){
+    addXP(5, "Planning Ahead 🔮")
+  }
+}
+
+save()
+render()
+checkCalendarMilestones()
+
+document.getElementById("taskInput").value = ""
+
+}
+
+function removeTask(key, index){
+
+data[key].splice(index,1)
+
+addXP(15, "Task Removed")
+
+save()
+render()
+
+}
+
+function changeMonth(dir){
+
+currentMonth += dir
+
+if(currentMonth < 0){
+currentMonth = 11
+currentYear--
+}
+if(currentMonth > 11){
+currentMonth = 0
+currentYear++
+}
+
+addXP(2, "Reviewing Month 📆")
+render()
+
+}
+
+function save(){
+localStorage.setItem("monthlyTasks", JSON.stringify(data))
+}
+
+render()
+
+function checkDailyLoad(){
+
+let maxTasksInDay = 0
+
+for(let key in data){
+  if(data[key].length > maxTasksInDay){
+    maxTasksInDay = data[key].length
+  }
+}
+
+if(maxTasksInDay >= 3){
+  addXP(10, "Productive Day ⚡")
+}
+
+if(maxTasksInDay >= 5){
+  addXP(30, "Fully Booked Day 🔥")
+}
+
+}
+
+function checkCalendarMilestones(){
+
+let totalTasks = 0
+let activeDays = 0
+let daysInMonth = getDaysInMonth(currentMonth, currentYear);
+let daysWithTask = new Set();
+
+for(let key in data){
+  if(data[key].length > 0){
+    activeDays++
+    totalTasks += data[key].length
+    const [year, month, day] = key.split('-').map(Number);
+    if(year === currentYear && month === currentMonth){
+      daysWithTask.add(day);
+    }
+  }
+}
+
+if(totalTasks === 5){
+  addXP(10, "Getting Organised 📋")
+}
+
+if(totalTasks === 10){
+  addXP(20, "Getting Organised 📋")
+}
+
+if(totalTasks === 15){
+  addXP(50, "Planner 🏆")
+}
+
+if(totalTasks === 30){
+  addXP(100, "Master Scheduler 🏆")
+}
+
+if(activeDays >= 5){
+  addXP(15, "Consistent Planning 📆")
+}
+
+if(activeDays >= 10){
+  addXP(30, "Highly Organised 🏆")
+}
+
+if(daysWithTask.size === daysInMonth) {
+  addXP(200, "Task Every Day This Month 👑")
+}
+
+if(totalTasks === 1 && activeDays === 1 && daysWithTask.size === 1) {
+  addXP(25, "First Task This Month 🎉")
+}
+
+checkDailyLoad()
+
+}
+</script>
+
+</body>
+</html>

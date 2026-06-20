@@ -1,0 +1,318 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .row {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            .row2 {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 330px;
+            }
+
+            .trophy-grid {
+        display: grid;
+        margin-top: -20px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        padding: 10px;
+        justify-items: center;
+      }
+
+.trophy {
+    background: #33b31f;
+    color: #fff;
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+    transition: 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.trophy:hover {
+    transform: scale(1.05);
+}
+
+.icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.locked {
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+
+.locked::after {
+    content: "🔒";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.crown {
+    background: linear-gradient(45deg, gold, orange);
+    color: black;
+}
+
+.trophy span {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+}
+        </style>
+    </head>
+    <body>
+<div style="display:flex; align-items:center; background-color:#366222; width:1250px; height:45px; margin-left:8px; margin-top: -8px;">
+
+  <div style="color:white; margin-left:10px; width:200px;">
+    <div style="font-size:14px;">Level <span id="level">1</span></div>
+    
+    <div style="background:#ccc; width:180px; height:8px; border-radius:5px;">
+      <div id="xpBar" style="background:#00ffcc; height:8px; width:0%; border-radius:5px;"></div>
+    </div>
+
+    <div style="font-size:10px;">
+      <span id="xp">0</span> / <span id="xpNeeded">100</span> XP
+    </div>
+  </div>
+
+ <a href="Life App Home Green.html"  style="text-decoration:none;">
+  <h1 style="flex-grow:1; text-align:center; color:#fff; font-size:30px; margin:0;font-weight: normal; margin-left: 349px; margin-right: 353px">
+    LifeSync 
+  </h1>
+</a>
+
+  <div style="display:flex; gap:20px; margin-right:-15px; margin-top: 0px;">
+    <a href="Life App Green Account.html"><img src="Cole profile pic.jpg" style="width:38px; height:30px;"></a>
+    <a href="Life App Colour Pick.html"><img src="Colour.png" style="width:38px; height:30px;"></a>
+    <a href="Life App Home Green Dark.html"><img src="Moon.png" style="width:30px; height:30px; margin-top: 1px"></a>
+  </div>
+</div>
+
+        <div class="row2" style="margin-top:13px;">
+            <div class="column" style="background-color:#366222; width:1250px; margin-left:12px; height:545px;">
+                <div style="text-align:center; padding:8px 16px;">
+                    <h2 style="color:#fff; margin-left: -30px; margin-top: -3px;">Trophies</h2>
+                    </div>
+                  <div class="trophy-grid" id="trophyGrid"></div>
+                    </div>
+                </div>
+                
+<script src="XP.js"></script>
+
+<script>
+
+const grid = document.getElementById("trophyGrid");
+
+function persistTrophy(key, condition) {
+  const saved = localStorage.getItem(key);
+
+  if (saved === 'true') return true;
+
+  if (condition) {
+    localStorage.setItem(key, 'true');
+    return true;
+  }
+
+  return false;
+}
+
+function getExtraMax() {
+  let max = 0;
+
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith('checklist_life_app_home_Green_daily_checklist:row_')) {
+      try {
+        const row = JSON.parse(localStorage.getItem(key));
+        const v = Number(row?.extra || 0);
+        if (!isNaN(v) && v > max) max = v;
+      } catch (e) {}
+    }
+  });
+
+  return max;
+}
+
+function updateTrophies() {
+  const grid = document.getElementById("trophyGrid");
+  if (!grid) return;
+
+  const budgetData = JSON.parse(localStorage.getItem('lifeBudget') || '[]');
+
+  const transactionCount = budgetData.length;
+
+  let income = 0;
+  let expense = 0;
+
+  budgetData.forEach(t => {
+    if (t.type === 'Income') income += Number(t.amount || 0);
+    else expense += Number(t.amount || 0);
+  });
+
+  const balance = income - expense;
+
+  const calendarData = JSON.parse(localStorage.getItem('weeklyTasks') || '[[],[],[],[],[],[],[]]');
+
+  const calendarTaskCount = calendarData.reduce((sum, arr) => sum + arr.length, 0);
+  const hasFullCalendarDay = calendarData.some(arr => arr.length === 6);
+  const isPerfectWeek = calendarData.every(arr => arr.length > 0);
+
+  const extraMax = getExtraMax();
+
+  const trophies = [
+    {
+      name: 'Perfect Day',
+      desc: 'Complete all tasks in a day',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_perfectDay', localStorage.getItem('perfectDay') === 'true')
+    },
+    {
+      name: 'Perfect Day Max',
+      desc: 'Complete all tasks in a day with at least 5 tasks',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_perfectDayMax', localStorage.getItem('perfectDayMax') === 'true')
+    },
+
+    {
+      name: '5 Extra',
+      desc: 'Complete 5 extra tasks',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_5Extra', extraMax >= 5)
+    },
+    {
+      name: '7 Extra',
+      desc: 'Complete 7 extra tasks',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_7Extra', extraMax >= 7)
+    },
+    {
+      name: '10 Extra',
+      desc: 'Complete 10 extra tasks',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_10Extra', extraMax >= 10)
+    },
+    {
+      name: '15 Extra',
+      desc: 'Complete 15 extra tasks',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_15Extra', extraMax >= 15)
+    },
+    {
+      name: 'Extra Max',
+      desc: 'Complete 20 extra tasks',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_20Extra', extraMax >= 20)
+    },
+
+    {
+      name: 'Transaction Novice',
+      desc: 'Complete 10 transactions',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_transactionNovice', transactionCount >= 10)
+    },
+    {
+      name: 'Transaction Master',
+      desc: 'Complete 25 transactions',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_transactionMaster', transactionCount >= 25)
+    },
+    {
+      name: 'Transaction King',
+      desc: 'Complete 50 transactions',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_transactionKing', transactionCount >= 50)
+    },
+
+    {
+      name: 'Strong Savings',
+      desc: 'Balance over 100',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_strongSavings', balance >= 100)
+    },
+    {
+      name: 'Money Master',
+      desc: 'Balance over 300',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_moneyMaster', balance >= 300)
+    },
+
+    {
+      name: 'Calendar Novice',
+      desc: 'Add 20 tasks to calendar',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_calendarNovice', calendarTaskCount >= 20)
+    },
+    {
+      name: 'Calendar King',
+      desc: 'Add 30 tasks to calendar',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_calendarKing', calendarTaskCount >= 30)
+    },
+
+    {
+      name: 'Full Calendar',
+      desc: 'Have a fully booked day (6 tasks in one day)',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_fullCalendar', hasFullCalendarDay)
+    },
+    {
+      name: 'Perfect Week',
+      desc: 'Have an active week (at least 1 task every day)',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_perfectWeek', isPerfectWeek)
+    },
+    {
+      name: 'Full Month',
+      desc: 'Full month of tasks',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_fullMonth', calendarTaskCount >= 30)
+    },
+
+    {
+      name: 'Creative Mind',
+      desc: 'Add 5 notes to the whiteboard',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_creativeMind', localStorage.getItem('trophy_creativeMind') === 'true')
+    },
+    {
+      name: 'Idea Machine',
+      desc: 'Add 10 notes to the whiteboard',
+      icon: '👑',
+      unlocked: persistTrophy('trophy_ideaMachine', localStorage.getItem('trophy_ideaMachine') === 'true')
+    },
+    {
+      name: 'Chief in Organisation',
+      desc: 'Spend 10 minutes on the whiteboard',
+      icon: '🏆',
+      unlocked: persistTrophy('trophy_chiefOrganisation', localStorage.getItem('trophy_chiefOrganisation') === 'true')
+    }
+  ];
+
+  grid.innerHTML = trophies.map(t => `
+    <div class="trophy${t.unlocked ? '' : ' locked'}">
+      <div class="icon">${t.icon}</div>
+      <span>${t.name}</span>
+      <span style="font-size:12px; color:#ccc;">${t.desc}</span>
+    </div>
+  `).join('');
+}
+
+updateTrophies();
+
+</script>
+
+<script src="storage.js"></script>
+
+    </body>
+
+</html>

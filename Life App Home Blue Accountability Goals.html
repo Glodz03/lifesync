@@ -1,0 +1,468 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+
+    .header {
+      margin: 10px 12px 5px;
+      height: 35px;
+      background: #1D49D7;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 18px 12px;
+    }
+
+    .panel {
+      background: #1D49D7;
+      border-radius: 10px;
+      padding: 10px 10px 14px;
+      min-height: 520px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 6px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tools input {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+    }
+
+    .tools button {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    table {
+      width: 96%;
+      margin: 10px auto 0;
+      border-collapse: collapse;
+      background: transparent;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 10px 12px;
+      color: #fff;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    td {
+      padding: 8px 12px;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      vertical-align: middle;
+    }
+
+    input[type="date"] {
+      background: #fff;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+
+    .total-control {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .total-control button {
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .total-value {
+      min-width: 26px;
+      text-align: center;
+      display: inline-block;
+      font-weight: 700;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .total-value.gold {
+      background-color: #FFD700;
+      color: #000;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    }
+
+    @media (max-width: 900px) {
+      .split { grid-template-columns: 1fr; }
+      .panel { min-height: auto; }
+    }
+  </style>
+</head>
+
+<body>
+<div style="display:flex; align-items:center; background-color:#1D49D7; width:1250px; height:45px; margin-left:15px;">
+
+  <!-- LEVEL SYSTEM (LEFT SIDE) -->
+  <div style="color:white; margin-left:10px; width:200px;">
+    <div style="font-size:14px;">Level <span id="level">1</span></div>
+    
+    <div style="background:#ccc; width:180px; height:8px; border-radius:5px;">
+      <div id="xpBar" style="background:#00ffcc; height:8px; width:0%; border-radius:5px;"></div>
+    </div>
+
+    <div style="font-size:10px;">
+      <span id="xp">0</span> / <span id="xpNeeded">100</span> XP
+    </div>
+  </div>
+
+  <!-- TITLE CENTER -->
+  <a href="Life App Home Blue.html" style="text-decoration:none; color: #fff">
+  <h1 style="flex-grow:1; text-align:center; color:#fff; font-size:30px; margin:0;">
+    LifeSync
+  </a></h1>
+
+  <!-- ICONS RIGHT -->
+  <div style="display:flex; gap:20px; margin-right:15px; margin-top: 5px">
+    <a href="Life App Blue Account.html"><img src="Cole profile pic.jpg" style="width:38px; height:30px;"></a>
+    <a href="Life App Colour Pick.html"><img src="Colour.png" style="width:38px; height:30px;"></a>
+    <a href="Life App Blue Trophy.html"><img src="Trophy.png" style="width:38px; height:30px;"></a>
+    <a href="Life App Home Blue Dark.html"><img src="Light Mode.png" style="width:38px; height:36px; margin-top: -2px"></a>
+  </div>
+  </div>
+
+  <div class="split">
+    <section class="panel" id="panel-left">
+      <div class="panel-header">
+        <h2>Glodi</h2>
+        <div class="tools">
+          <input id="newTaskNameLeft" placeholder="New task name">
+          <button id="addTaskBtnLeft">Add</button>
+          <button id="removeTaskBtnLeft">Remove</button>
+        </div>
+      </div>
+
+      <table class="checklist-table" role="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th style="text-align:center;">Total</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-left"></tbody>
+      </table>
+    </section>
+
+    <section class="panel" id="panel-right">
+      <div class="panel-header">
+        <h2>Joceline</h2>
+        <div class="tools">
+          <input id="newTaskNameRight" placeholder="New task name">
+          <button id="addTaskBtnRight">Add</button>
+          <button id="removeTaskBtnRight">Remove</button>
+        </div>
+      </div>
+
+      <table class="checklist-table" role="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th style="text-align:center;">Total</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-right"></tbody>
+      </table>
+    </section>
+  </div>
+
+<script src="XP.js"></script>
+<script src="Storage.js"></script>
+
+ <script>
+const battles = JSON.parse(localStorage.getItem("accountability_battles") || "[]");
+const activeIndex = localStorage.getItem("activeBattle");
+
+const battle = battles[activeIndex];
+
+console.log(battle); // test
+
+  const addBtnLeft = document.getElementById("addTaskBtnLeft");
+  const addBtnRight = document.getElementById("addTaskBtnRight");
+  const newTaskNameLeft = document.getElementById("newTaskNameLeft");
+  const newTaskNameRight = document.getElementById("newTaskNameRight");
+
+  (function () {
+    const pageKey = (location.pathname.split('/').pop() || 'page').split('.')[0].replace(/\W+/g, '-');
+    const STORAGE_KEY = "battle_" + activeIndex;
+
+    function loadData(){
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+  function saveData(data){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+window.update = function(index, side, field, value){
+  const data = loadData();
+  data[index][side][field] = value;
+  saveData(data);
+}
+
+window.changeTotal = function(index, side, amount){
+
+  const data = loadData();
+
+  data[index][side].total += amount;
+
+  if(data[index][side].total < 0){
+    data[index][side].total = 0;
+  }
+
+  saveData(data);
+  renderGlobal();
+}
+
+function removeTask(name){
+  let data = loadData();
+
+  data = data.filter(task => task.name.toLowerCase() !== name.toLowerCase());
+
+  saveData(data);
+  render();
+}
+
+leftBody.innerHTML += `
+  <tr>
+    <td>${task.name}</td>
+    <td><input type="date" value="${task.left.start}" onchange="update(${i}, 'left', 'start', this.value)"></td>
+    <td><input type="date" value="${task.left.end}" onchange="update(${i}, 'left', 'end', this.value)"></td>
+    <td>
+      <div class="total-control">
+        <button onclick="changeTotal(${i}, 'left', -1)">-</button>
+        <span class="total-value">${task.left.total}</span>
+        <button onclick="changeTotal(${i}, 'left', 1)">+</button>
+      </div>
+    </td>
+    <td><button onclick="removeTask('${task.name}')">❌</button></td>
+  </tr>
+`;
+
+
+function renderGlobal(){
+
+  const data = loadData();
+
+  const leftBody = document.getElementById("tbody-left");
+  const rightBody = document.getElementById("tbody-right");
+
+  if(!leftBody || !rightBody) return;
+
+  leftBody.innerHTML = "";
+  rightBody.innerHTML = "";
+
+  data.forEach((task, i) => {
+
+    leftBody.innerHTML += `
+      <tr>
+        <td>${task.name}</td>
+        <td><input type="date" value="${task.left.start}" onchange="update(${i}, 'left', 'start', this.value)"></td>
+        <td><input type="date" value="${task.left.end}" onchange="update(${i}, 'left', 'end', this.value)"></td>
+        <td>
+          <div class="total-control">
+            <button onclick="changeTotal(${i}, 'left', -1)">-</button>
+            <span class="total-value">${task.left.total}</span>
+            <button onclick="changeTotal(${i}, 'left', 1)">+</button>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    rightBody.innerHTML += `
+      <tr>
+        <td>${task.name}</td>
+        <td><input type="date" value="${task.right.start}" onchange="update(${i}, 'right', 'start', this.value)"></td>
+        <td><input type="date" value="${task.right.end}" onchange="update(${i}, 'right', 'end', this.value)"></td>
+        <td>
+          <div class="total-control">
+            <button onclick="changeTotal(${i}, 'right', -1)">-</button>
+            <span class="total-value">${task.right.total}</span>
+            <button onclick="changeTotal(${i}, 'right', 1)">+</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
+    const LEFT_PLAYER = "Glodi";
+    const RIGHT_PLAYER = "Joceline";
+
+    function slugify(name) {
+      return name.toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '') || ('task_' + Date.now());
+    }
+
+    function createRowHTML(displayName, key) {
+      return `
+        <tr data-key="${key}">
+          <td class="task-name">${displayName}</td>
+          <td><input type="date" name="start_${key}"></td>
+          <td><input type="date" name="end_${key}"></td>
+          <td>
+            <div class="total-control">
+              <button type="button" class="total-decr">-</button>
+              <span class="total-value">0</span>
+              <button type="button" class="total-incr">+</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+function addTask(name){
+
+  const data = loadData();
+
+  data.push({
+    name,
+    left: { total: 0, start: "", end: "" },
+    right: { total: 0, start: "", end: "" }
+  });
+
+  saveData(data);
+  render();
+}
+
+    // ✅ NEW: Compare total scores and set Glodi gold if Glodi > Joceline
+    function updateScoreHighlight() {
+      const leftTotals = Array.from(document.querySelectorAll('#tbody-left .total-value'))
+        .map(el => parseInt(el.textContent || '0', 10) || 0);
+      const rightTotals = Array.from(document.querySelectorAll('#tbody-right .total-value'))
+        .map(el => parseInt(el.textContent || '0', 10) || 0);
+
+      const glodiScore = leftTotals.reduce((a, b) => a + b, 0);
+      const jocelineScore = rightTotals.reduce((a, b) => a + b, 0);
+
+      // clear gold from all totals on Glodi side first
+      document.querySelectorAll('#tbody-left .total-value').forEach(el => el.classList.remove('gold'));
+
+      // if Glodi is winning, make ALL Glodi totals gold
+      if (glodiScore > jocelineScore) {
+        document.querySelectorAll('#tbody-left .total-value').forEach(el => el.classList.add('gold'));
+      }
+    }
+
+      // Delegated click for TOTAL +/- (no double listeners)
+
+      // Add/Remove buttons
+addBtnLeft.onclick = () => {
+  const name = newTaskNameLeft.value.trim();
+  if(!name) return;
+  addTask(name);
+  newTaskNameLeft.value = "";
+};
+
+addBtnRight.onclick = () => {
+  const name = newTaskNameRight.value.trim();
+  if(!name) return;
+  addTask(name);
+  newTaskNameRight.value = "";
+};
+
+      // Enter key adds task
+
+renderGlobal();
+
+    // run once on load
+    updateScoreHighlight();
+
+    function render(){
+
+  const data = loadData();
+
+  const leftBody = document.getElementById("tbody-left");
+  const rightBody = document.getElementById("tbody-right");
+
+  leftBody.innerHTML = "";
+  rightBody.innerHTML = "";
+
+  data.forEach((task, i) => {
+
+    // LEFT ROW
+    leftBody.innerHTML += `
+      <tr>
+        <td>${task.name}</td>
+        <td><input type="date" value="${task.left.start}" onchange="update(${i}, 'left', 'start', this.value)"></td>
+        <td><input type="date" value="${task.left.end}" onchange="update(${i}, 'left', 'end', this.value)"></td>
+        <td>
+          <div class="total-control">
+            <button onclick="changeTotal(${i}, 'left', -1)">-</button>
+            <span class="total-value">${task.left.total}</span>
+            <button onclick="changeTotal(${i}, 'left', 1)">+</button>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    // RIGHT ROW
+    rightBody.innerHTML += `
+      <tr>
+        <td>${task.name}</td>
+        <td><input type="date" value="${task.right.start}" onchange="update(${i}, 'right', 'start', this.value)"></td>
+        <td><input type="date" value="${task.right.end}" onchange="update(${i}, 'right', 'end', this.value)"></td>
+        <td>
+          <div class="total-control">
+            <button onclick="changeTotal(${i}, 'right', -1)">-</button>
+            <span class="total-value">${task.right.total}</span>
+            <button onclick="changeTotal(${i}, 'right', 1)">+</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  updateScoreHighlight();
+}
+  })();
+  </script>
+</body>
+</html>

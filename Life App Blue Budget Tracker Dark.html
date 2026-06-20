@@ -1,0 +1,494 @@
+<html>
+    <style>
+    body {
+      background-image: url(Black.jpg);
+    }
+  </style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .row {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            .row2 {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 30px;
+            }
+
+            .controls{
+text-align:center;
+margin-bottom:30px;
+margin-top: 5px;
+}
+
+.controls input{
+padding:8px;
+width:200px;
+}
+
+.controls select{
+padding:8px;
+}
+
+.controls button{
+padding:8px 12px;
+margin-left:5px;
+cursor:pointer;
+}.controls{
+text-align:center;
+margin-bottom:30px;
+}
+
+.controls input{
+padding:8px;
+width:200px;
+}
+
+.controls select{
+padding:8px;
+}
+
+.controls button{
+padding:8px 12px;
+margin-left:5px;
+cursor:pointer;
+}
+
+table{
+width:95%;
+margin-top:-400px;
+margin-left: 50px;
+border-collapse:collapse;
+font-size:20px;
+color: #fff;
+}
+
+th{
+text-align:left;
+padding:10px;
+border-bottom:1px solid white;
+}
+
+td{
+padding:10px;
+}
+
+            .checklist-table {
+                width: 92%;
+                margin: 12px auto;
+                border-collapse: collapse;
+                background: transparent;
+            }
+
+            .checklist-table thead th {
+                text-align: left;
+                padding: 6px 12px;
+                color: #ffffff;
+                font-weight: 700;
+                border-bottom: 1px solid rgba(255,255,255,0.12);
+            }
+
+            .checklist-table td {
+                padding: 6px 12px;
+                color: #ffffff;
+                vertical-align: middle;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+            }
+
+            .checklist-table input[type="date"],
+            .checklist-table input[type="number"] {
+                background: #ffffff;
+                border: none;
+                padding: 6px 8px;
+                border-radius: 3px;
+            }
+
+            .checklist-table input[type="checkbox"] {
+                transform: scale(1.15);
+            }
+
+            .extra-control {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .extra-control button {
+                padding: 4px 8px;
+                border-radius: 4px;
+            }
+
+            .total-control {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                justify-content: center;
+            }
+            .total-control button {
+                padding: 4px 8px;
+                border-radius: 4px;
+            }
+            .total-value {
+                min-width: 26px;
+                text-align: center;
+                display: inline-block;
+                font-weight: 600;
+                color: #fff;
+            }
+.celebration {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #00ffcc;
+  color: #000;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(0,255,200,0.7);
+  animation: popIn 1s ease, fadeOut 1s ease 3.5s forwards;
+  z-index: 9999;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-20px); }
+}
+
+.confetti {
+  position: fixed;
+  width: 9px;
+  height: 9px;
+  background: red;
+  top: 0;
+  animation: fall 8s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+.task-complete {
+  animation: glow 0.5s ease;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0px transparent; }
+  50% { box-shadow: 0 0 15px #00ffcc; }
+  100% { box-shadow: 0 0 0px transparent; }
+}
+        </style>
+    </head>
+    <body>
+<div style="display:flex; align-items:center; background-color:#7191F9; width:1250px; height:45px; margin-left:8px; margin-top: -8px;">
+
+  <div style="color:white; margin-left:10px; width:200px;">
+    <div style="font-size:14px;">Level <span id="level">1</span></div>
+    
+    <div style="background:#ccc; width:180px; height:8px; border-radius:5px;">
+      <div id="xpBar" style="background:#00ffcc; height:8px; width:0%; border-radius:5px;"></div>
+    </div>
+
+    <div style="font-size:10px;">
+      <span id="xp">0</span> / <span id="xpNeeded">100</span> XP
+    </div>
+  </div>
+
+ <a href="Life App Home Blue Dark.html"  style="text-decoration:none;">
+  <h1 style="flex-grow:1; text-align:center; color:#fff; font-size:30px; margin:0;font-weight: normal; margin-left: 349px; margin-right: 353px">
+    LifeSync 
+  </h1>
+</a>
+
+  <div style="display:flex; gap:20px; margin-right:15px; margin-top: 0px;">
+    <a href="Life App Blue Account.html"><img src="Cole profile pic.jpg" style="width:38px; height:30px;"></a>
+    <a href="Life App Colour Pick.html"><img src="Colour Dark.png" style="width:38px; height:30px;"></a>
+    <a href="Life App Blue Budget Tracker.html"><img src="Light Mode.png" style="width:38px; height:38px; margin-top: -2px"></a>
+  </div>
+</div>
+
+        <div class="row2" style="margin-top:20px; width: 1250px; height: 490px; margin-left:12px; background-color:#7191F9;">
+        <h2 style="text-align:left; color:#fff; margin-right:80px; margin-top: 5px; padding:0;">Budget Tracker</h2>
+        <div class="controls">
+
+<input id="name" placeholder="Transaction name" style="padding: 6px 12px; color:#7191F9">
+
+<input id="amount" type="number" placeholder="Amount"  style="padding: 6px 12px; color:#7191F9">
+
+<select id="type" style="padding: 6px 12px; color:#7191F9">
+<option value="Income">Income</option>
+<option value="Expense">Expense</option>
+</select>
+
+<select id="category" style="padding: 6px 12px; color:#7191F9">
+<option>Food</option>
+<option>Bills</option>
+<option>Transport</option>
+<option>Entertainment</option>
+<option>Savings</option>
+<option>Other</option>
+</select>
+
+<button onclick="addTransaction()" style="padding: 6px 12px; color:#7191F9;font-weight:700;border-radius:4px;">Add</button>
+<button onclick="clearAll()" style="padding: 6px 12px; color:#7191F9;font-weight:700;border-radius:4px;">Remove</button>
+
+</div>
+                        <a href="Life App Stats.html" style="text-decoration:none;"><button style="padding:6px 12px; border-radius:4px; background-color:#fff; color:#7191F9; font-weight:700; cursor:pointer; margin-top: 5px;">Stats</button></a>
+                    </div>
+
+                    <table>
+
+<tr>
+<th>Select</th>
+<th>Transaction</th>
+<th>Amount</th>
+<th>Type</th>
+<th>Category</th>
+<th>Total</th>
+</tr>
+
+<tbody id="table"></tbody>
+
+</table>
+
+
+<div class="summary" style="margin-left: 60px; color: #fff;">
+
+<span>Income: <b id="Income">0</b></span>
+<span style="margin-left: 80px">Expense: <b id="Expense">0</b></span>
+<span style="margin-left: 80px">Balance: <b id="Balance">0</b></span>
+
+</div>
+
+</div>
+
+</div>
+                </div>
+
+
+
+<script src="XP.js"></script>
+
+<script>
+
+function celebrate(message) {
+  const old = document.querySelector(".celebration");
+  if (old) old.remove();
+
+  const pop = document.createElement("div");
+  pop.className = "celebration";
+  pop.textContent = message;
+  document.body.appendChild(pop);
+
+  setTimeout(() => pop.remove(), 2500);
+
+  for (let i = 0; i < 15; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration = (1.5 + Math.random()) + "s";
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 2000);
+  }
+}
+function notify(message) {
+  const old = document.querySelector(".celebration");
+  if (old) old.remove();
+
+  const pop = document.createElement("div");
+  pop.className = "celebration";
+  pop.textContent = message;
+  document.body.appendChild(pop);
+
+  setTimeout(() => pop.remove(), 2500);
+}
+
+let data = JSON.parse(localStorage.getItem("lifeBudget")) || []
+
+let lastBalance = 0;
+
+render()
+
+function addTransaction(){
+
+let name = document.getElementById("name").value
+let amount = Number(document.getElementById("amount").value)
+let type = document.getElementById("type").value
+let category = document.getElementById("category").value
+
+if(name=="" || amount==0) return
+
+data.push({
+name,
+amount,
+type,
+category
+})
+
+if(type === "Income"){
+  addXP(20, "Income Added 💰")
+} else {
+  addXP(-10, "Expense Tracked 💸")
+}
+
+if(category === "Savings"){
+  addXP(15, "Saving Money 🏦")
+}
+
+save()
+render()
+checkBudgetHealth()
+checkMilestones()
+}
+
+function render(){
+
+let table = document.getElementById("table")
+table.innerHTML=""
+
+let Income=0
+let Expense=0
+let runningTotal=0
+
+data.forEach((t,i)=>{
+
+if(t.type=="Income"){
+Income+=t.amount
+runningTotal+=t.amount
+}else{
+Expense+=t.amount
+runningTotal-=t.amount
+}
+
+let row=document.createElement("tr")
+row.innerHTML = `
+<td><input type="checkbox" class="select-item" data-index="${i}"></td>
+<td>${t.name}</td>
+<td>${t.amount}</td>
+<td>${t.type}</td>
+<td>${t.category}</td>
+<td>${runningTotal}</td>
+`
+table.appendChild(row)
+
+})
+
+
+document.getElementById("Income").innerText=Income
+document.getElementById("Expense").innerText=Expense
+document.getElementById("Balance").innerText=Income-Expense
+
+let currentBalance = Income - Expense;
+if(currentBalance < 0 && lastBalance < 0 && currentBalance > lastBalance){
+  notify("👏 Doing better! Keep going!");
+}lastBalance = currentBalance;
+}
+
+function removeItem(i){
+
+data.splice(i,1)
+
+save()
+render()
+
+}
+function clearAll(){
+
+let checkboxes = document.querySelectorAll(".select-item")
+
+data = data.filter((_, index) => {
+    return !checkboxes[index].checked
+})
+
+save()
+render()
+
+}
+function save(){
+
+localStorage.setItem("lifeBudget",JSON.stringify(data))
+
+}
+
+function showStats(){
+
+let stats={}
+let html=""
+
+data.forEach(t=>{
+
+if(t.type=="Expense"){
+
+if(!stats[t.category]){
+stats[t.category]=0
+}
+
+stats[t.category]+=t.amount
+
+}
+
+})
+
+for(let c in stats){
+
+html+=`<p>${c}: ${stats[c]}</p>`
+
+}
+
+document.getElementById("statsContent").innerHTML=html
+document.getElementById("statsBox").style.display="block"
+
+}
+
+function checkBudgetHealth(){
+
+let Income = 0
+let Expense = 0
+
+data.forEach(t=>{
+  if(t.type=="Income") Income += t.amount
+  else Expense += t.amount
+})
+
+let Balance = Income - Expense
+
+if(Balance > 0){
+  addXP(25, "Positive Balance 📈")
+}
+
+if(Balance >= 100){
+  addXP(30)
+  celebrate("🏆Over 100. Strong savings!")
+}
+
+if(Balance >= 300){
+  addXP(100)
+  celebrate("👑Money Master!")
+}
+
+if(Balance < 0 && Balance < lastBalance){
+  addXP(-20)
+  notify("Overspending!")
+}
+}
+</script>
+
+    </body>
+
+</html>
